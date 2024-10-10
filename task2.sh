@@ -1,11 +1,10 @@
 #!/bin/bash
 
-# Task a: Filter files
-grep -l "sample" * | xargs -I{} sh -c 'count=$(grep -o "CSC510" {} | wc -l | tr -d " "); [ "$count" -ge 3 ] && echo "$count {}"' |
-
-# Task b: Sort the filtered files
-xargs -I{} sh -c 'set -- {}; size=$(stat -f "%z" $2); echo "$1 $size $2"' | gawk '{print $1, $2, $3}' | sort -k1,1nr -k2,2nr | gawk '{print $3}' |
-
-# Task c: Replace 'file_' with 'filtered_' in the file names and list the final output.
+#task a
+grep -rl 'sample' dataset1/ | xargs -I {} sh -c 'count=$(grep -o "CSC510" "{}" | wc -l); if [ "$count" -ge 3 ]; then echo "$count {}"; fi' | \
+#task b
+gawk '{print $1, $2}' | xargs -I {} sh -c 'size=$(stat -f "%z" "$(echo {} | cut -d" " -f2)"); echo "$(echo {} | cut -d" " -f1) $size $(echo {} | cut -d" " -f2)"' | sor    t -k1,1nr -k2,2nr | \
+#task c
 sed 's/file_/filtered_/'
+
 
