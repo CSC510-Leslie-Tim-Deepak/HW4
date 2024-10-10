@@ -1,0 +1,1 @@
+sed 's/\("[^"]*\),\([^"]*"\)/\1;\2/g' titanic.csv | awk -F',' '$3 == 2 && $12 ~ /S/ && $6 ~ /^[0-9]+(\.[0-9]+)?$/ {sum += $6; count++; gsub(/\<male\>/, "M", $0); gsub(/\<female\>/, "F", $0); print $0} END {if (count > 0) print "Average Age: " sum / count; else print "No valid ages found."}'
